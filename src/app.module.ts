@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './modules/users/users.module';
+import { UserModule } from './modules/users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Users } from './modules/users/users.entity';
+import { User } from './modules/users/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
@@ -15,11 +15,11 @@ import { AuthModule } from './modules/auth/auth.module';
       username: 'root',
       password: '123456',
       database: 'simple_pm',
-      entities: [Users],
+      entities: [User],
       charset: "utf8mb4", // 设置chatset编码为utf8mb4
       synchronize: true,
     }),
-    UsersModule,
+    UserModule,
     AuthModule,
   ],
   controllers: [AppController],
