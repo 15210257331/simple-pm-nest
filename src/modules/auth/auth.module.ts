@@ -9,7 +9,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
 @Module({
   imports: [
-    // 默认使用jwt策略 
     PassportModule,
     JwtModule.register({
       secret: jwtConfig.secret, // 设置secret
