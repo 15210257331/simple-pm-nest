@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+// JwtService 不是全局服务 只有引入JwtModule 的模块才可以使用JwtService
 
 @Injectable()
 export class AuthService {
@@ -22,17 +23,7 @@ export class AuthService {
         });
         if (user) {
             return password === user.password;
-
         }
-        return false;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-    async login(user: any): Promise<any> {
-        const { username, id } = user;
-        const payload = { username, id };
-        return {
-            token: this.jwtService.sign(payload),
-        }
+        return true;
     }
 }

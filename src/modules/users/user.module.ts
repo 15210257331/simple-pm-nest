@@ -8,7 +8,7 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
     imports: [
         TypeOrmModule.forFeature([User]),
-        AuthModule
+        AuthModule // AuthModule 导出了 JwtModule JwtService依赖于JwtModule 否则userModule 无法使用JwtService
     ],
     providers: [UserService],
     controllers: [UserController],

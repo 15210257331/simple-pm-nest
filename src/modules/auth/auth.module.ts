@@ -9,7 +9,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/user.entity';
 @Module({
   imports: [
-    PassportModule,
+    // 配置默认的策略 这样不用在每个路由上面添加 @UseGuards(AuthGuard('jwt')) 可以使用@UseGuards(AuthGuard()) 省略jwt字符串
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConfig.secret, // 设置secret
       signOptions: { expiresIn: '36000s' }, // 设置token的属性，时间为3600*10就是十小时
@@ -18,6 +19,6 @@ import { User } from '../users/user.entity';
   ],
   controllers: [],
   providers: [AuthService, LocalStrategy, JwtStrategy], // 把AuthService，LocalStrategy注册成提供者
-  exports: [AuthService, LocalStrategy, JwtStrategy], // 把这个服务抛出，给其他模块使用
+  exports: [JwtModule, AuthService, LocalStrategy, JwtStrategy,PassportModule], // 把这个服务抛出，给其他模块使用
 })
 export class AuthModule { }
