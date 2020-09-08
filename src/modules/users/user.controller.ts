@@ -13,17 +13,11 @@ export class UserController {
         private readonly userService: UserService
     ) { }
 
+    // 登录
     // @UseGuards(AuthGuard('local'))
     @Post('/login')
-    public async login(@Body() data: LoginDTO): Promise<any> {
-        return this.userService.login(data);
-    }
-
-    // 获取用户信息
-    @UseGuards(AuthGuard('jwt'))
-    @Get('/info')
-    public async getUserInfo(username: string): Promise<any> {
-        return this.userService.getUserInfo(username);
+    public async login(@Body() loginDTO: LoginDTO): Promise<any> {
+        return this.userService.login(loginDTO);
     }
 
     // 注册
@@ -32,6 +26,13 @@ export class UserController {
     @Post('/register')
     public async register(@Body() data: RegisterInfoDTO): Promise<any> {
         return this.userService.register(data);
+    }
+
+    // 获取用户信息
+    @UseGuards(AuthGuard('jwt'))
+    @Get('/info')
+    public async getUserInfo(username: string): Promise<any> {
+        return this.userService.getUserInfo(username);
     }
 
     // 删除用户

@@ -13,8 +13,8 @@ export class UserService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async login(data: LoginDTO): Promise<any> {
-        const { username, password } = data;
+    async login(loginDTO: LoginDTO): Promise<any> {
+        const { username, password } = loginDTO;
         const doc = await this.userRepository.findOne({ username: username });
         if (doc) {
             if (doc.password === password) {
