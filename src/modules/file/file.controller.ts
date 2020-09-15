@@ -7,9 +7,7 @@ import { FileService } from './file.service';
 export class FileController {
     constructor(
         private readonly fileService: FileService
-    ) {
-
-    }
+    ) { }
 
     @Post('/upload')
     @UseInterceptors(FileInterceptor('file'))

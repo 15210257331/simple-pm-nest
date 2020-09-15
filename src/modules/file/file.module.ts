@@ -6,6 +6,10 @@ import { diskStorage } from 'multer';
 import * as path from 'path';
 import * as moment from 'moment';
 
+/**
+ * 文件上传单独模块
+ */
+
 @Module({
   imports: [
     MulterModule.register({

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-import { LoginDTO, RegisterInfoDTO } from './user.dto';
+import { LoginDTO, RegisterInfoDTO } from './dto/user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { makeSalt, encryptPassword } from '../../common/cryptogram';
 
@@ -79,5 +79,9 @@ export class UserService {
 
     async deleteUser(id: string): Promise<any> {
         return await this.userRepository.delete(id)
+    }
+
+    async findOne(id: number): Promise<any> {
+        return await this.userRepository.findOne(id);
     }
 }

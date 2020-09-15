@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
@@ -18,6 +19,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     async validate(payload: any) {
         console.log('执行了 JwtStrategy');
+        // console.log(payload)
+        // 此方法返回的payload将创建一个user对象将会附加到请求对象上
         return payload;
     }
 }
