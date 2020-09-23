@@ -1,3 +1,4 @@
+import { Tag } from './modules/project/tag.entity';
 import { Task } from './modules/task/task.entity';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -10,6 +11,7 @@ import { FileModule } from './modules/file/file.module';
 import { ProjectModule } from './modules/project/project.module';
 import { Project } from './modules/project/project.entity';
 import { TaskModule } from './modules/task/task.module';
+import { Type } from './modules/project/type.entity';
 
 @Module({
   imports: [
@@ -20,7 +22,7 @@ import { TaskModule } from './modules/task/task.module';
       username: 'root',
       password: '123456',
       database: 'simple_pm',
-      entities: [User,Project,Task],
+      entities: [User,Project,Task,Type, Tag],
       charset: "utf8mb4", // 设置chatset编码为utf8mb4
       synchronize: true,
     }),

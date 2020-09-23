@@ -2,7 +2,7 @@
 import { Controller, Post, UseGuards, Body } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { AuthGuard } from '@nestjs/passport';
-import { TaskDTO } from './dto/task.dto';
+import { TaskAddDTO } from './dto/taskAdd.dto';
 import { Result } from '../../interface/result.interface';
 
 @Controller('task')
@@ -13,7 +13,7 @@ export class TaskController {
 
     @Post('/add')
     @UseGuards(AuthGuard('jwt'))
-    public async taskAdd(@Body() taskDTO: TaskDTO): Promise<Result> {
-        return this.taskService.taskAdd(taskDTO);
+    public async taskAdd(@Body() taskAddDTO: TaskAddDTO): Promise<Result> {
+        return this.taskService.taskAdd(taskAddDTO);
     }
 }

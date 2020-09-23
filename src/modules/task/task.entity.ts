@@ -70,14 +70,6 @@ export class Task {
     })
     endTime: Date;
 
-    @Column({
-        type: 'varchar',
-        nullable: true,
-        name: 'tag',
-        comment: '任务标签'
-    })
-    tag: string;
-
     /**
      * 任务和任务负责人是多对一的关系
      */

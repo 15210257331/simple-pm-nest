@@ -2,56 +2,194 @@
 import { Project } from './project.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { Result } from '../../interface/result.interface';
-import { ProjectDTO } from './dto/project.dto';
-import { UserService } from '../user/user.service';
+import { ProjectAddDTO } from './dto/projectAdd.dto';
+import { ProjectUpdateDTO } from './dto/projectUpdate.dto';
 import { User } from '../user/user.entity';
+import { PostBody } from '../../interface/post-body.interface';
+import { ProjectTagAddDTO } from './dto/projectTagAdd.dto';
+import { Tag } from './tag.entity';
+import { Type } from './type.entity';
+import { ProjectTypeAddDTO } from './dto/projectTypeAdd.dto';
 
 @Injectable()
 export class ProjectService {
     constructor(
         @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
         @InjectRepository(User) private readonly userRepository: Repository<User>,
+        @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+        @InjectRepository(Type) private readonly typeRepository: Repository<Type>,
     ) { }
 
 
-
-    async projectAdd(projectDTO: ProjectDTO, request: any): Promise<Result> {
+    /**
+    * 
+    * @param body 
+    * @param request 
+    * 按照name 字段模糊查询
+    */
+    async projectList(body: PostBody): Promise<Result> {
         try {
-            const project = new Project();
-            project.name = projectDTO.name;
-            project.content = projectDTO.content;
-            project.cover = 'http://www.baidu.com';
-            project.creator = await this.userRepository.findOne(request.user.userId);
-            project.members = await this.userRepository.findByIds(projectDTO.member);
-            const doc = await this.projectRepository.save(project);
+            const doc = await this.projectRepository.find({
+                where: {
+                    'name': Like(`%${body.name}%`),
+                },
+                relations: ['creator', 'members'],
+            });
             return {
                 code: 10000,
-                message: 'success',
+                msg: 'success',
                 data: doc
             }
         } catch (err) {
             return {
                 code: 999,
-                message: err,
+                msg: err
+            }
+        }
+    }
+
+    async projectAdd(projectAddDTO: ProjectAddDTO, request: any): Promise<Result> {
+        try {
+            const project = new Project();
+            project.name = projectAddDTO.name;
+            project.content = projectAddDTO.content;
+            project.cover = 'http://www.baidu.com';
+            project.creator = await this.userRepository.findOne(request.user.userId);
+            project.members = await this.userRepository.findByIds(projectAddDTO.member);
+            const doc = await this.projectRepository.save(project);
+            return {
+                code: 10000,
+                msg: 'success',
+                data: doc
+            }
+        } catch (err) {
+            return {
+                code: 999,
+                msg: err,
             };
         }
 
     }
 
-    async getAllProject(): Promise<Result> {
+    /**
+     * 更新项目
+     * @param projectDTO 
+     * @param request 
+     */
+    async projectUpdate(projectUpdateDTO: ProjectUpdateDTO): Promise<Result> {
         try {
-            const doc = await this.projectRepository.find({ relations: ['creator','members'] });
+            const id = projectUpdateDTO.id;
+            const doc = await this.projectRepository.update(id, {
+                'name': projectUpdateDTO.name,
+                'content': projectUpdateDTO.content,
+                'cover': projectUpdateDTO.cover,
+            });
             return {
                 code: 10000,
-                message: 'Success',
+                msg: 'success',
                 data: doc
-            };
+            }
         } catch (err) {
             return {
                 code: 999,
-                message: err,
+                msg: err,
+            };
+        }
+    }
+    /**
+     *  删除项目
+     * @param projectDTO 
+     * @param request 
+     */
+    async projectDelete(id: number): Promise<Result> {
+        try {
+            const doc = await this.projectRepository.delete(id);
+            return {
+                code: 10000,
+                msg: 'success',
+                data: doc
+            }
+        } catch (err) {
+            return {
+                code: 999,
+                msg: err,
+            };
+        }
+    }
+
+    /**
+     * 项目详情
+     * @param projectDTO 
+     * @param request 
+     */
+    async projectDetail(id: number): Promise<Result> {
+        try {
+            const doc = await this.projectRepository.findOne({
+                where: {
+                    'id': id,
+                },
+                relations: ['creator', 'members', 'tasks'],
+            });
+            return {
+                code: 10000,
+                msg: 'success',
+                data: doc
+            }
+        } catch (err) {
+            return {
+                code: 999,
+                msg: err,
+            };
+        }
+    }
+
+
+    /**
+     * 添加项目标签
+     * @param projectDTO 
+     * @param request 
+     */
+    async projectTagAdd(projectTagAddDTO: ProjectTagAddDTO): Promise<Result> {
+        try {
+            const tag = new Tag();
+            tag.name = projectTagAddDTO.name;
+            tag.color = projectTagAddDTO.color;
+            tag.projects = await this.projectRepository.findByIds([projectTagAddDTO.id]);
+            const doc = await this.tagRepository.create(tag);
+            return {
+                code: 10000,
+                msg: 'success',
+                data: doc
+            }
+        } catch (err) {
+            return {
+                code: 999,
+                msg: err,
+            };
+        }
+    }
+    /**
+     * 添加项目类型
+     * @param projectDTO 
+     * @param request 
+     */
+    async projectTypeAdd(projectTypeAddDTO: ProjectTypeAddDTO): Promise<Result> {
+        try {
+            const type = new Type();
+            type.name = projectTypeAddDTO.name;
+            type.projects = await this.projectRepository.findByIds([projectTypeAddDTO.id]);
+            const doc = await this.typeRepository.create(type);
+            return {
+                code: 10000,
+                msg: 'success',
+                data: doc
+            }
+        } catch (err) {
+            return {
+                code: 999,
+                msg: err,
             };
         }
     }

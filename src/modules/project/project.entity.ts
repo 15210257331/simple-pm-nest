@@ -1,6 +1,8 @@
 import { Task } from './../task/task.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToOne, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from '../user/user.entity';
+import { Type } from './type.entity';
+import { Tag } from './tag.entity';
 /**
  * 实体对应数据库中的表 字段类型会类比映射到数据库支持的类型
  * 你也可以通过在@Column装饰器中隐式指定列类型来使用数据库支持的任何列类型
@@ -11,7 +13,7 @@ export class Project {
     id: string;
 
     @Column({
-        type: 'varchar',
+        type: 'char',
         nullable: false,
         length: 50,
         unique: false,
@@ -21,8 +23,7 @@ export class Project {
     name: string;
 
     @Column({
-        length: 500,
-        type: 'varchar',
+        type: 'text',
         nullable: false,
         name: 'content',
         comment: '项目内容',
@@ -84,6 +85,28 @@ export class Project {
         name: 'project_user' // 自定义关联表名称
     })
     members: User[];
+
+    /**
+     * 项目类型
+     * 项目类型和项目之间的多对多关系
+     *  
+     * */
+    @ManyToMany(() => Type, type => type.projects)
+    @JoinTable({
+        name: 'project_type' // 自定义关联表名称
+    })
+    types: Type[];
+
+    /**
+     * 项目标签
+     * 项目标签和项目之间的多对多关系
+     *  
+     * */
+    @ManyToMany(() => Tag, tag => tag.projects)
+    @JoinTable({
+        name: 'project_tag' // 自定义关联表名称
+    })
+    tags: Tag[];
 
     /**
     * 任务和项目是一对多的关系

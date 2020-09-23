@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsNumber } from "class-validator";
 
-export class ProjectDTO {
+export class ProjectAddDTO {
     @IsNotEmpty({ message: '项目名称不能为空' })
     readonly name: string;
 
