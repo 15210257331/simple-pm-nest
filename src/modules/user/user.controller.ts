@@ -1,11 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Controller, Get, Body, UseGuards, Post, UsePipes, Delete, Param } from '@nestjs/common';
+import { Controller, Get, Body, UseGuards, Post, UsePipes, Delete, Param, Request } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
-import { LoginDTO, RegisterInfoDTO } from './dto/user.dto';
 import { ValidationPipe } from '../../pipe/validation.pipe';
 import { Result } from '../../interface/result.interface';
+import { PostBody } from '../../interface/post-body.interface';
+import { RegisterDTO } from './dto/register.dto';
+import { LoginDTO } from './dto/login.dto';
 @Controller('/user')
 export class UserController {
     constructor(
@@ -22,18 +24,17 @@ export class UserController {
     }
 
     // 注册
-    @UseGuards(AuthGuard('jwt'))
-    @UsePipes(new ValidationPipe())
     @Post('/register')
-    public async register(@Body() data: RegisterInfoDTO): Promise<Result> {
+    @UsePipes(new ValidationPipe())
+    public async register(@Body() data: RegisterDTO): Promise<Result> {
         return this.userService.register(data);
     }
 
     // 获取用户信息
     @UseGuards(AuthGuard('jwt'))
     @Get('/info')
-    public async getUserInfo(username: string): Promise<Result> {
-        return this.userService.getUserInfo(username);
+    public async getUserInfo(@Request() request: any): Promise<Result> {
+        return this.userService.getUserInfo(request);
     }
 
     // 删除用户
@@ -45,8 +46,8 @@ export class UserController {
 
     // 用户列表
     @UseGuards(AuthGuard('jwt'))
-    @Get('/list')
-    public async findAll(): Promise<Result> {
-        return this.userService.userList();
+    @Post('/list')
+    public async findAll(@Body() body: PostBody): Promise<Result> {
+        return this.userService.userList(body);
     }
 }

@@ -7,6 +7,8 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // 处理跨域问题
+  app.enableCors();
   // 监听所有的请求路由，使用中间件打印入参
   // app.use(express.json()); // For parsing application/json
   // app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
@@ -25,6 +27,6 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api-doc', app, document);
-  await app.listen(3000);
+  await app.listen(4000);
 }
 bootstrap();

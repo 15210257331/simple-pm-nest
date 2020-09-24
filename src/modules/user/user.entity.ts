@@ -30,6 +30,7 @@ export class User {
     @Column({
         type: 'varchar',
         length: 50,
+        charset: 'utf8mb4',
         comment: '姓名/昵称'
     })
     nickname: string;
@@ -49,7 +50,7 @@ export class User {
     @Column({
         type: 'varchar',
         nullable: false,
-        //default: () => 'asdfasdfasdfdsadsf',
+        default: 'https://img.blingabc.com/6d1edc49f8ff44a2bb21f20dea806d73.jpg',
         name: 'avatar',
         comment: '头像'
     })
@@ -58,7 +59,8 @@ export class User {
     @Column({
         type: 'text',
         comment: '个人介绍',
-        name: 'introduction'
+        name: 'introduction',
+        charset: 'utf8mb4',
     })
     introduction: string;
 
@@ -66,6 +68,7 @@ export class User {
         type: 'int',
         name: 'sex',
         nullable: false,
+        enum: [1, 2],
         comment: '性别 1表示男 2表示女'
     })
     sex: number;
@@ -75,10 +78,11 @@ export class User {
         name: 'status',
         default: () => 1,
         nullable: false,
-        comment: '用户状态 1标识在职 2表示离职'
+        comment: '用户状态 1在职 2离职'
     })
     status: number;
 
+    // 是一个特殊列，自动为实体插入日期。无需设置此列，该值将自动设置
     @CreateDateColumn({
         type: 'timestamp',
         nullable: false,
@@ -87,10 +91,14 @@ export class User {
     })
     createTime: Date;
 
+    // 有一种称为simple-array的特殊列类型，它可以将原始数组值存储在单个字符串列中
     @Column({
-        comment: '用户角色'
+        type: 'simple-array',
+        charset: 'utf8mb4',
+        comment: '用户角色',
+        name: 'role',
     })
-    role: string;
+    role: string[];
 
     /**
      * 成员和项目是一对多的关系

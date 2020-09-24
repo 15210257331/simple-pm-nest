@@ -36,6 +36,9 @@ export class ProjectService {
                     'name': Like(`%${body.name}%`),
                 },
                 relations: ['creator', 'members'],
+                order: {
+                    createTime: 'DESC' //ASC 按时间正序 DESC 按时间倒序
+                }
             });
             return {
                 code: 10000,
@@ -55,7 +58,6 @@ export class ProjectService {
             const project = new Project();
             project.name = projectAddDTO.name;
             project.content = projectAddDTO.content;
-            project.cover = 'http://www.baidu.com';
             project.creator = await this.userRepository.findOne(request.user.userId);
             project.members = await this.userRepository.findByIds(projectAddDTO.member);
             const doc = await this.projectRepository.save(project);
@@ -66,17 +68,15 @@ export class ProjectService {
             }
         } catch (err) {
             return {
-                code: 999,
+                code: 9999,
                 msg: err,
             };
         }
-
     }
 
     /**
      * 更新项目
      * @param projectDTO 
-     * @param request 
      */
     async projectUpdate(projectUpdateDTO: ProjectUpdateDTO): Promise<Result> {
         try {
@@ -93,15 +93,14 @@ export class ProjectService {
             }
         } catch (err) {
             return {
-                code: 999,
+                code: 9999,
                 msg: err,
             };
         }
     }
     /**
      *  删除项目
-     * @param projectDTO 
-     * @param request 
+     * @param id  
      */
     async projectDelete(id: number): Promise<Result> {
         try {
@@ -113,7 +112,7 @@ export class ProjectService {
             }
         } catch (err) {
             return {
-                code: 999,
+                code: 9999,
                 msg: err,
             };
         }

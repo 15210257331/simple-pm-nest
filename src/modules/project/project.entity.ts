@@ -41,6 +41,7 @@ export class Project {
     @Column({
         type: 'varchar',
         nullable: true,
+        default: 'https://img.blingabc.com/6d1edc49f8ff44a2bb21f20dea806d73.jpg',
         name: 'cover',
         comment: '项目封面'
     })

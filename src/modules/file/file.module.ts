@@ -15,12 +15,15 @@ import * as moment from 'moment';
     MulterModule.register({
       storage: diskStorage({
         // 文件存储路径
-        destination: path.resolve(__dirname, '../../asset/avatar'),
+        destination: (req, file, cb) => {
+          const filePath = path.resolve(__dirname, '../../asset/avatar');
+          console.log(filePath);
+          cb(null, filePath);
+        },
         filename: (req, file, cb) => {
           // 自定义文件名
-          const filename = `${moment().format('YYYY-MM-DD HH:mm:ss')}.${file.mimetype.split('/')[1]}`;
+          const filename = `${moment().format('x')}.${file.mimetype.split('/')[1]}`;
           return cb(null, filename);
-          // return cb(null, file.originalname);
         },
       }),
     }),

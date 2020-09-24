@@ -1,23 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Project } from './../project/project.entity';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { Injectable, Request } from '@nestjs/common';
 import { TaskAddDTO } from './dto/taskAdd.dto';
 import { Result } from '../../interface/result.interface';
 import { Task } from './task.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { generate8Code } from '../../common/util';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class TaskService {
 
     constructor(
         @InjectRepository(Task) private readonly taskRepository: Repository<Task>,
+        @InjectRepository(User) private readonly userRepository: Repository<User>,
+        @InjectRepository(Project) private readonly projectRepository: Repository<Project>,
     ) { }
 
-    async taskAdd(taskAddDTO: TaskAddDTO): Promise<Result> {
+    async taskAdd(taskAddDTO: TaskAddDTO, request: any): Promise<Result> {
         try {
             const task = new Task();
             task.name = taskAddDTO.name;
             task.content = taskAddDTO.content;
-            task.number = '#dflkjc';
+            task.number = generate8Code(8);
+            task.status = 1;
+            task.principal = await this.userRepository.findOne(request.user.userId);
+            task.project = await this.projectRepository.findOne(taskAddDTO.projectId);
             const doc = await this.taskRepository.save(task);
             return {
                 code: 10000,
@@ -26,7 +35,7 @@ export class TaskService {
             }
         } catch (err) {
             return {
-                code: 999,
+                code: 9999,
                 msg: err
             }
         }

@@ -7,4 +7,8 @@ export class TaskAddDTO {
     @IsNotEmpty({ message: '任务内容不能为空' })
     readonly content: string;
 
+    @IsNotEmpty({ message: '任务内容不能为空' })
+    @IsNumber()
+    readonly projectId: number;
+
 }

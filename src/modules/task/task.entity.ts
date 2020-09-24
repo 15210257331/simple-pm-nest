@@ -15,6 +15,7 @@ export class Task {
         nullable: false,
         length: 50,
         unique: false,
+        charset: 'utf8mb4',
         name: 'name',
         comment: '任务名称',
     })
@@ -25,6 +26,7 @@ export class Task {
         type: 'varchar',
         nullable: false,
         name: 'content',
+        charset: 'utf8mb4',
         comment: '任务内容',
     })
     content: string;
@@ -36,7 +38,7 @@ export class Task {
         nullable: false,
         comment: '任务状态 1未开始  2进行中  3已完成  4已作废  5 已删除'
     })
-    status: string;
+    status: number;
 
     @Column({
         type: 'varchar',
