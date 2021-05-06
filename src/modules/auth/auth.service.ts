@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../user/user.entity';
+import { User } from '../user/entity/user.entity';
 import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
 // JwtService 不是全局服务 只有引入JwtModule 的模块才可以使用JwtService
+import { JwtService } from '@nestjs/jwt';
+
 
 @Injectable()
 export class AuthService {
@@ -13,17 +14,16 @@ export class AuthService {
     ) { }
 
     /**
-    * 验证用户名和密码是否匹配
+    * 进行用户验证
     * @param username 
     * @param password 
     */
-    public async validatePassword(username: string, password: string): Promise<boolean> {
-        const user: any = await this.userRepository.findOne({
-            username: username
-        });
-        if (user) {
-            return password === user.password;
+    public async validatePassword(username: string, password: string): Promise<any> {
+        const doc = await this.userRepository.findOne({ username: username });
+        if (doc && doc.password === password) {
+            const { password, ...result } = doc;
+            return result;
         }
-        return true;
+        return null;
     }
 }

@@ -16,7 +16,7 @@ import * as moment from 'moment';
       storage: diskStorage({
         // 文件存储路径
         destination: (req, file, cb) => {
-          const filePath = path.resolve(__dirname, '../../asset/avatar');
+          const filePath = path.resolve(__dirname, '../../asset/img');
           console.log(filePath);
           cb(null, filePath);
         },

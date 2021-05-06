@@ -8,6 +8,7 @@ import { Result } from '../../interface/result.interface';
 import { PostBody } from '../../interface/post-body.interface';
 import { RegisterDTO } from './dto/register.dto';
 import { LoginDTO } from './dto/login.dto';
+import { retry } from 'rxjs/operators';
 @Controller('/user')
 export class UserController {
     constructor(
@@ -17,9 +18,9 @@ export class UserController {
 
     // 登录
     // @UseGuards(AuthGuard('local'))
-    @UsePipes(new ValidationPipe())
     @Post('/login')
-    public async login(@Body() loginDTO: LoginDTO): Promise<Result> {
+    @UsePipes(new ValidationPipe())
+    public async login(@Body() loginDTO: LoginDTO,): Promise<Result> {
         return this.userService.login(loginDTO);
     }
 
@@ -31,10 +32,16 @@ export class UserController {
     }
 
     // 获取用户信息
-    @UseGuards(AuthGuard('jwt'))
     @Get('/info')
+    @UseGuards(AuthGuard('jwt'))
     public async getUserInfo(@Request() request: any): Promise<Result> {
         return this.userService.getUserInfo(request);
+    }
+
+    @Post('/update')
+    @UseGuards(AuthGuard('jwt'))
+    public async updateUserInfo(@Request() request: any): Promise<Result> {
+        return this.userService.updateUserInfo(request);
     }
 
     // 删除用户

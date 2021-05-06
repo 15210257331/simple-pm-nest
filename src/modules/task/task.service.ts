@@ -1,13 +1,13 @@
-import { Project } from './../project/project.entity';
+import { Project } from '../project/entity/project.entity';
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injectable, Request } from '@nestjs/common';
 import { TaskAddDTO } from './dto/taskAdd.dto';
 import { Result } from '../../interface/result.interface';
-import { Task } from './task.entity';
+import { Task } from './entity/task.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { generate8Code } from '../../common/util';
-import { User } from '../user/user.entity';
+import { generate8Code } from '../../common/utils';
+import { User } from '../user/entity/user.entity';
 
 @Injectable()
 export class TaskService {

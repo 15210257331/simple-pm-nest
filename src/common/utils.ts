@@ -1,11 +1,3 @@
-/*
- * @Author: chenxiaofei
- * @Date: 2020-03-19 14:13:25
- * @LastEditors: Sephiroth·D·Kid
- * @LastEditTime: 2020-03-19 14:30:57
- * @Description: 工具函数：加密 & 解密
- */
-
 import * as crypto from 'crypto';
 
 /**
@@ -29,4 +21,22 @@ export function encryptPassword(password: string, salt: string): string {
     // 10000 代表迭代次数 16代表长度
     crypto.pbkdf2Sync(password, tempSalt, 10000, 16, 'sha1').toString('base64')
   );
+}
+
+// 生成8位编码
+export const generate8Code = (num: number): string => {
+    const str = "2367820149QWERTYUIOPASDFGHJKLZXCVBNM1456789";
+    let res = '#';
+    for (let i = 0; i < num; i++) {
+        res += str[Math.floor(Math.random() * str.length)];
+    }
+    return res;
+}
+
+// 数组扁平化
+export const flatten = (arr: any[]): any[] => {
+    while (arr.some(item => Array.isArray(item))) {
+        arr = [].concat(...arr);
+    }
+    return arr;
 }

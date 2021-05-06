@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './entity/user.entity';
 import { Repository, Like } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { makeSalt, encryptPassword } from '../../common/cryptogram';
+import { makeSalt, encryptPassword } from '../../common/utils';
 import { Result } from '../../interface/result.interface';
 import { PostBody } from '../../interface/post-body.interface';
 import { LoginDTO } from './dto/login.dto';
@@ -29,6 +29,7 @@ export class UserService {
                 return {
                     code: 10000,
                     msg: '登录成功',
+                    // 生成token
                     token: this.jwtService.sign(payload),
                 }
             } else {
@@ -52,6 +53,28 @@ export class UserService {
             return {
                 code: 10000,
                 data: doc,
+                msg: 'success'
+            }
+        } catch (error) {
+            return {
+                code: 999,
+                msg: error
+            }
+        }
+    }
+
+    async updateUserInfo(request:any):Promise<Result> {
+        try {
+            const doc = await this.userRepository.update(request.user.userId, {
+                nickname: request.body.nickname,
+                username: request.body.username,
+                email: request.body.email,
+                avatar: request.body.avatar,
+                introduction: request.body.introduction
+            });
+            return {
+                code: 10000,
+                data: '更新成功',
                 msg: 'success'
             }
         } catch (error) {

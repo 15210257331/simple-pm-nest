@@ -1,4 +1,4 @@
-import { Project } from '../project/project.entity';
+import { Project } from '../../project/entity/project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 /**
  * 实体对应数据库中的表 字段类型会类比映射到数据库支持的类型
@@ -101,7 +101,7 @@ export class User {
     role: string[];
 
     /**
-     * 成员和项目是一对多的关系
+     * 创建者和项目是一对多的关系
      * 该成员创建的项目
      *  */
     @OneToMany(() => Project, project => project.creator)

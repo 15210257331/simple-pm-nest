@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Project } from './project.entity';
+import { Project } from './entity/project.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { Result } from '../../interface/result.interface';
 import { ProjectAddDTO } from './dto/projectAdd.dto';
 import { ProjectUpdateDTO } from './dto/projectUpdate.dto';
-import { User } from '../user/user.entity';
+import { User } from '../user/entity/user.entity';
 import { PostBody } from '../../interface/post-body.interface';
 import { ProjectTagAddDTO } from './dto/projectTagAdd.dto';
-import { Tag } from './tag.entity';
-import { Type } from './type.entity';
+import { Tag } from './entity/tag.entity';
+import { Type } from './entity/type.entity';
 import { ProjectTypeAddDTO } from './dto/projectTypeAdd.dto';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class ProjectService {
             }
         } catch (err) {
             return {
-                code: 999,
+                code: 9999,
                 msg: err
             }
         }
@@ -120,15 +120,10 @@ export class ProjectService {
 
     /**
      * 项目详情
-     * @param projectDTO 
-     * @param request 
      */
     async projectDetail(id: number): Promise<Result> {
         try {
-            const doc = await this.projectRepository.findOne({
-                where: {
-                    'id': id,
-                },
+            const doc = await this.projectRepository.findOne(id,{
                 relations: ['creator', 'members', 'tasks'],
             });
             return {

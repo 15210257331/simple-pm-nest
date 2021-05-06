@@ -3,6 +3,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Logger } from '../common/log4js';
 
+/**
+ * 日志拦截器 用来打印返回数据
+ */
 @Injectable()
 export class LogerInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -10,12 +13,12 @@ export class LogerInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map(data => {
         const logFormat = ` <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    Request original url: ${req.originalUrl}
-    Method: ${req.method}
-    IP: ${req.ip}
-    User: ${JSON.stringify(req.user)}
-    Response data:\n ${JSON.stringify(data.data)}
-    <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`;
+              Request original url: ${req.originalUrl}
+              Method: ${req.method}
+              IP: ${req.ip}
+              User: ${JSON.stringify(req.user)}
+              Response data:\n ${JSON.stringify(data.data)}
+             <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`;
         Logger.info(logFormat);
         Logger.access(logFormat);
         return data;

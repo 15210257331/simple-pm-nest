@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { ProjectController } from './project.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Project } from './project.entity';
+import { Project } from './entity/project.entity';
 import { UserModule } from '../user/user.module';
-import { User } from '../user/user.entity';
-import { Type } from './type.entity';
-import { Tag } from './tag.entity';
+import { User } from '../user/entity/user.entity';
+import { Type } from './entity/type.entity';
+import { Tag } from './entity/tag.entity';
 
 @Module({
   imports: [

@@ -1,17 +1,18 @@
-import { Tag } from './modules/project/tag.entity';
-import { Task } from './modules/task/task.entity';
+import { Tag } from './modules/project/entity/tag.entity';
+import { Task } from './modules/task/entity/task.entity';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './modules/user/user.entity';
+import { User } from './modules/user/entity/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { FileModule } from './modules/file/file.module';
 import { ProjectModule } from './modules/project/project.module';
-import { Project } from './modules/project/project.entity';
+import { Project } from './modules/project/entity/project.entity';
 import { TaskModule } from './modules/task/task.module';
-import { Type } from './modules/project/type.entity';
+import { Type } from './modules/project/entity/type.entity';
+import { EventsGateway } from './modules/message/events.gateway';
 
 @Module({
   imports: [
@@ -30,9 +31,9 @@ import { Type } from './modules/project/type.entity';
     AuthModule,
     FileModule,
     ProjectModule,
-    TaskModule
+    TaskModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EventsGateway],
 })
 export class AppModule { }
