@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
      * Passport 将基于 validate() 方法的返回值构建一个user 对象，并将其作为属性附加到请求对象上。
      */
     async validate(payload: any) {
-        console.log('执行了 JwtStrategy');
+        // console.log('执行了 JwtStrategy');
         // console.log(payload)
         // 无需处理 直接返回
         return payload;

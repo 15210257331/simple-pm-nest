@@ -1,5 +1,7 @@
 import { Project } from '../../project/entity/project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { Schedule } from '../../schedule/entity/schedule.entity';
+import { Role } from '../../role/entity/role.entity';
 /**
  * 实体对应数据库中的表 字段类型会类比映射到数据库支持的类型
  * 你也可以通过在@Column装饰器中隐式指定列类型来使用数据库支持的任何列类型
@@ -42,7 +44,8 @@ export class User {
     email: string;
 
     @Column({
-        type: 'int',
+        type: 'varchar',
+        length: 11,
         comment: '电话'
     })
     phone: number;
@@ -91,15 +94,6 @@ export class User {
     })
     createTime: Date;
 
-    // 有一种称为simple-array的特殊列类型，它可以将原始数组值存储在单个字符串列中
-    @Column({
-        type: 'simple-array',
-        charset: 'utf8mb4',
-        comment: '用户角色',
-        name: 'role',
-    })
-    role: string[];
-
     /**
      * 创建者和项目是一对多的关系
      * 该成员创建的项目
@@ -113,4 +107,24 @@ export class User {
      */
     @ManyToMany(() => Project, project => project.members)
     participateProjects: Project[];
+
+    /**
+     * 创建者和日程是一对多的关系
+     * 该成员创建的日程
+     *  */
+    @OneToMany(() => Schedule, schedule => schedule.creator)
+    schedules: Schedule[];
+
+    /**
+     * 日程的参与者和用户是多对多的关系
+     * 该成员参与的日程
+     */
+    @ManyToMany(() => Schedule, schedule => schedule.participant)
+    participateSchedules: Schedule[];
+
+    /**
+     * 角色和用户是多对多的关系
+     */
+    @ManyToMany(() => Role, role => role.users,)
+    roles: Role[];
 }

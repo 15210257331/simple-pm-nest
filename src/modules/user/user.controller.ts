@@ -8,7 +8,6 @@ import { Result } from '../../interface/result.interface';
 import { PostBody } from '../../interface/post-body.interface';
 import { RegisterDTO } from './dto/register.dto';
 import { LoginDTO } from './dto/login.dto';
-import { retry } from 'rxjs/operators';
 @Controller('/user')
 export class UserController {
     constructor(
@@ -34,12 +33,14 @@ export class UserController {
     // 获取用户信息
     @Get('/info')
     @UseGuards(AuthGuard('jwt'))
+    @UsePipes(new ValidationPipe())
     public async getUserInfo(@Request() request: any): Promise<Result> {
         return this.userService.getUserInfo(request);
     }
 
     @Post('/update')
     @UseGuards(AuthGuard('jwt'))
+    @UsePipes(new ValidationPipe())
     public async updateUserInfo(@Request() request: any): Promise<Result> {
         return this.userService.updateUserInfo(request);
     }
@@ -56,5 +57,12 @@ export class UserController {
     @Post('/list')
     public async findAll(@Body() body: PostBody): Promise<Result> {
         return this.userService.userList(body);
+    }
+
+    // 为用户关联角色
+    @Post('/setRole')
+    @UseGuards(AuthGuard('jwt'))
+    public async setRole(@Body() body: PostBody): Promise<Result> {
+        return this.userService.setRole(body);
     }
 }

@@ -13,7 +13,7 @@ import { User } from '../user/entity/user.entity';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: jwtConfig.secret, // 设置secret
-      signOptions: { expiresIn: '36000s' }, // 设置token的属性，时间为3600*10就是十小时
+      signOptions: { expiresIn: '360000s' }, // 设置token的属性，时间为3600*10就是十小时
     }),
     TypeOrmModule.forFeature([User]),
   ],

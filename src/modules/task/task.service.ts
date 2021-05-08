@@ -1,7 +1,7 @@
 import { Project } from '../project/entity/project.entity';
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injectable, Request } from '@nestjs/common';
-import { TaskAddDTO } from './dto/taskAdd.dto';
+import { TaskAddDTO } from './dto/task-add.dto';
 import { Result } from '../../interface/result.interface';
 import { Task } from './entity/task.entity';
 import { Repository } from 'typeorm';

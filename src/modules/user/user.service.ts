@@ -9,11 +9,13 @@ import { Result } from '../../interface/result.interface';
 import { PostBody } from '../../interface/post-body.interface';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
+import { Role } from '../role/entity/role.entity';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
+        @InjectRepository(Role) private readonly roleRepository: Repository<Role>,
         private readonly jwtService: JwtService,
     ) { }
 
@@ -47,9 +49,18 @@ export class UserService {
         }
     }
 
+    /**
+     * 
+     * @param request 
+     * 获取用户信息
+     */
     async getUserInfo(request: any): Promise<Result> {
         try {
-            const doc = await this.userRepository.findOne(request.user.userId);
+            const id = request.user.userId;
+            const doc = await this.userRepository.findOne(id, {
+                relations: ['roles'],
+            });
+            // console.log(doc);
             return {
                 code: 10000,
                 data: doc,
@@ -57,13 +68,13 @@ export class UserService {
             }
         } catch (error) {
             return {
-                code: 999,
+                code: 9999,
                 msg: error
             }
         }
     }
 
-    async updateUserInfo(request:any):Promise<Result> {
+    async updateUserInfo(request: any): Promise<Result> {
         try {
             const doc = await this.userRepository.update(request.user.userId, {
                 nickname: request.body.nickname,
@@ -104,7 +115,7 @@ export class UserService {
             data.phone = registerDTO.phone;
             data.sex = 1;
             data.introduction = registerDTO.introduction;
-            data.role = ['admin', '超级管理员']
+            data.roles = []
             await this.userRepository.insert(data);
             return {
                 code: 10000,
@@ -124,6 +135,7 @@ export class UserService {
                 where: {
                     'nickname': Like(`%${body.name}%`),
                 },
+                relations: ['roles']
             })
             return {
                 code: 10000,
@@ -142,7 +154,25 @@ export class UserService {
         return await this.userRepository.delete(id)
     }
 
-    async findOne(id: number): Promise<any> {
-        return await this.userRepository.findOne(id);
+    async setRole(body: PostBody): Promise<any> {
+        try {
+            const {userId, roleIds} = body;
+            const roles = await this.roleRepository.findByIds(roleIds);
+            const user = await this.userRepository.findOne(userId);
+            user.roles = roles;
+            const doc = await this.userRepository.save(user);
+            if (doc) {
+                return {
+                    code: 10000,
+                    data: doc,
+                    msg: 'success'
+                }
+            }
+        } catch (error) {
+            return {
+                code: 9999,
+                msg: error,
+            };
+        }
     }
 }

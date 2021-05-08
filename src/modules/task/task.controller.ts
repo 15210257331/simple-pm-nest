@@ -2,7 +2,7 @@
 import { Controller, Post, UseGuards, Body, Request } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { AuthGuard } from '@nestjs/passport';
-import { TaskAddDTO } from './dto/taskAdd.dto';
+import { TaskAddDTO } from './dto/task-add.dto';
 import { Result } from '../../interface/result.interface';
 
 @Controller('task')
