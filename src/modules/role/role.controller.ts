@@ -32,6 +32,17 @@ export class RoleController {
          return this.roleService.roleList(data);
      }
 
+     /**
+      * @param data 
+      * 所有角色不分页
+      */
+     @Get('/all')
+     @UsePipes(new ValidationPipe())
+     @UseGuards(AuthGuard('jwt'))
+     public async allRole(): Promise<Result> {
+         return this.roleService.allRole();
+     }
+
      // 角色删除
      @Get('/delete/:id')
      @UsePipes(new ValidationPipe())

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PostBody } from '../../interface/post-body.interface';
 import { Like, Repository } from 'typeorm';
 import { RoleAddDTO } from './dto/role-add.dto';
 import { RoleAuthorityDTO } from './dto/role-authority';
@@ -33,10 +34,14 @@ export class RoleService {
         }
     }
 
-    async roleList(data: any): Promise<any> {
+    /**
+     * 分页角色列表
+     * @param body 
+     */
+    async roleList(body: PostBody): Promise<any> {
         try {
-            const { name, page, size } = data;
-            const doc = await this.roleRepository.find({
+            const { name, page, size } = body;
+            const [doc, count] = await this.roleRepository.findAndCount({
                 where: {
                     'name': Like(`%${name}%`),
                 },
@@ -44,8 +49,36 @@ export class RoleService {
                 order: {
                     createDate: 'DESC' //ASC 按时间正序 DESC 按时间倒序
                 },
-                skip: page*size,
+                skip: (page - 1) * size,
                 take: size,
+            });
+            return {
+                code: 10000,
+                data: {
+                    list: doc,
+                    total: count
+                },
+                msg: 'success',
+            };
+        } catch (error) {
+            return {
+                code: 9999,
+                msg: error,
+            };
+        }
+    }
+
+    /**
+     * 角色列表部分页
+     * @param body 
+     */
+    async allRole(): Promise<any> {
+        try {
+            const doc = await this.roleRepository.find({
+                cache: true,
+                order: {
+                    createDate: 'DESC' //ASC 按时间正序 DESC 按时间倒序
+                },
             });
             return {
                 code: 10000,
@@ -59,6 +92,7 @@ export class RoleService {
             };
         }
     }
+
     async roleDelete(id: number | string): Promise<any> {
         try {
             const doc = await this.roleRepository.delete(id)
@@ -97,7 +131,7 @@ export class RoleService {
 
     async relevanceAuthority(roleAuthorityDTO: RoleAuthorityDTO): Promise<any> {
         try {
-            const {id, authority} = roleAuthorityDTO;
+            const { id, authority } = roleAuthorityDTO;
             const doc = await this.roleRepository.update(id, {
                 'authority': authority,
             });

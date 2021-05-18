@@ -14,6 +14,18 @@ export class ScheduleService {
 
     async scheduleList(request: any): Promise<any> {
         try {
+            // const userQb = await this.userRepository
+            //     .createQueryBuilder("user")
+            //     .where("user.id = :id", { id: request.user.userId });
+
+            // const schedules = await this.scheduleRepository
+            //     .createQueryBuilder("schedule")
+            //     .where("schedule.creator= " + userQb.getQuery() + ")")
+            //     .leftJoinAndSelect('schedule.creator', 'creator')
+            //     .leftJoinAndSelect('schedule.participant', 'participant')
+            //     .getMany();
+
+                
             const doc = await this.scheduleRepository.createQueryBuilder("schedule")
                 .where(qb => {
                     const subQuery = qb

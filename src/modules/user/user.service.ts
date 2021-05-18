@@ -131,15 +131,25 @@ export class UserService {
 
     async userList(body: PostBody): Promise<Result> {
         try {
-            const doc = await this.userRepository.find({
+            const { name, page, size } = body; 
+            const [doc, count] = await this.userRepository.findAndCount({
                 where: {
-                    'nickname': Like(`%${body.name}%`),
+                    'nickname': Like(`%${name}%`),
                 },
-                relations: ['roles']
+                relations: ['roles'],
+                cache: true,
+                order: {
+                    createTime: 'DESC' //ASC 按时间正序 DESC 按时间倒序
+                },
+                skip: (page - 1) * size,
+                take: size,
             })
             return {
                 code: 10000,
-                data: doc,
+                data: {
+                    list: doc,
+                    total: count
+                },
                 msg: 'success',
             };
         } catch (error) {
