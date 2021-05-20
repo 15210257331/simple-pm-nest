@@ -1,6 +1,8 @@
-import { Project } from '../../project/entity/project.entity';
+import { Project } from './project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from '../../user/entity/user.entity';
+import { User } from './user.entity';
+import { Type } from './type.entity';
+import { Tag } from './tag.entity';
 /**
  * 实体对应数据库中的表 字段类型会类比映射到数据库支持的类型
  * 你也可以通过在@Column装饰器中隐式指定列类型来使用数据库支持的任何列类型
@@ -11,9 +13,8 @@ export class Task {
     id: string;
 
     @Column({
-        type: 'varchar',
+        type: 'text',
         nullable: false,
-        length: 50,
         unique: false,
         charset: 'utf8mb4',
         name: 'name',
@@ -22,8 +23,7 @@ export class Task {
     name: string;
 
     @Column({
-        length: 500,
-        type: 'varchar',
+        type: 'text',
         nullable: false,
         name: 'content',
         charset: 'utf8mb4',
@@ -89,4 +89,22 @@ export class Task {
     @ManyToOne(() => Project, project => project.tasks)
     @JoinColumn()
     project: Project;
+    
+    /**
+     * 任务和类型是多对多的关系
+     */
+    @ManyToMany(() => Type, type => type.tasks)
+    @JoinTable({
+        name: 'task_type' // 自定义关联表名称
+    })
+    types: Type[];
+
+    /**
+     * 任务和标签是多对多的关系
+     */
+    @ManyToMany(() => Tag, tag => tag.tasks)
+    @JoinTable({
+        name: 'task_tag' // 自定义关联表名称
+    })
+    tags: Tag[];
 }

@@ -44,10 +44,15 @@ export class ProjectController {
         return this.projectService.projectDelete(id);
     }
 
-    // 项目详情
+    /**
+     * 查询项目详情
+     * @param id 
+     * 参数以？连接 使用@Query()获取参数
+     * ？id= xxx
+     */
     @Get('/detail')
     @UseGuards(AuthGuard('jwt'))
-    public async projectDetail(@Param('id') id: number): Promise<Result> {
+    public async projectDetail(@Query('id') id: number): Promise<Result> {
         return this.projectService.projectDetail(id);
     }
 

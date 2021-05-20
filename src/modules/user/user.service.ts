@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entity/user.entity';
+import { User } from '../../entity/user.entity';
 import { Repository, Like } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { makeSalt, encryptPassword } from '../../common/utils';
@@ -9,7 +9,7 @@ import { Result } from '../../interface/result.interface';
 import { PostBody } from '../../interface/post-body.interface';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
-import { Role } from '../role/entity/role.entity';
+import { Role } from '../../entity/role.entity';
 
 @Injectable()
 export class UserService {
@@ -129,9 +129,10 @@ export class UserService {
         }
     }
 
+    // 分页查询用户列表
     async userList(body: PostBody): Promise<Result> {
         try {
-            const { name, page, size } = body; 
+            const { name, page, size } = body;
             const [doc, count] = await this.userRepository.findAndCount({
                 where: {
                     'nickname': Like(`%${name}%`),
@@ -160,13 +161,35 @@ export class UserService {
         }
     }
 
+    // 查询所有用户
+    async all(body: PostBody): Promise<Result> {
+        try {
+            const doc = await this.userRepository.find({
+                cache: true,
+                order: {
+                    createTime: 'DESC'
+                },
+            })
+            return {
+                code: 10000,
+                data: doc,
+                msg: 'success',
+            };
+        } catch (error) {
+            return {
+                code: 9999,
+                msg: error,
+            };
+        }
+    }
+
     async deleteUser(id: string): Promise<any> {
         return await this.userRepository.delete(id)
     }
 
     async setRole(body: PostBody): Promise<any> {
         try {
-            const {userId, roleIds} = body;
+            const { userId, roleIds } = body;
             const roles = await this.roleRepository.findByIds(roleIds);
             const user = await this.userRepository.findOne(userId);
             user.roles = roles;

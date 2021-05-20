@@ -6,7 +6,7 @@ import { jwtConfig } from '../../common/config';
 import { JwtStrategy } from './jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../user/entity/user.entity';
+import { User } from '../../entity/user.entity';
 @Module({
   imports: [
     // 配置默认的策略 这样不用在每个路由上面添加 @UseGuards(AuthGuard('jwt'))

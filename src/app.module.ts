@@ -1,21 +1,21 @@
-import { Tag } from './modules/project/entity/tag.entity';
-import { Task } from './modules/task/entity/task.entity';
+import { Tag } from './entity/tag.entity';
+import { Task } from './entity/task.entity';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './modules/user/entity/user.entity';
+import { User } from './entity/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { FileModule } from './modules/file/file.module';
 import { ProjectModule } from './modules/project/project.module';
-import { Project } from './modules/project/entity/project.entity';
+import { Project } from './entity/project.entity';
 import { TaskModule } from './modules/task/task.module';
-import { Type } from './modules/project/entity/type.entity';
+import { Type } from './entity/type.entity';
 import { EventsGateway } from './modules/message/events.gateway';
 import { RoleModule } from './modules/role/role.module';
-import { Role } from './modules/role/entity/role.entity';
-import { Schedule } from './modules/schedule/entity/schedule.entity';
+import { Role } from './entity/role.entity';
+import { Schedule } from './entity/schedule.entity';
 import { ScheduleModule } from './modules/schedule/schedule.module';
 
 @Module({

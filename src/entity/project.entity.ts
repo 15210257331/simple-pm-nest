@@ -1,6 +1,6 @@
-import { Task } from '../../task/entity/task.entity';
+import { Task } from './task.entity';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToOne, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
-import { User } from '../../user/entity/user.entity';
+import { User } from './user.entity';
 import { Type } from './type.entity';
 import { Tag } from './tag.entity';
 /**
@@ -12,22 +12,30 @@ export class Project {
     @PrimaryGeneratedColumn()
     id: string;
 
-    @Column({type: 'char',nullable: false,length: 50,unique: false,name: 'name',comment: '项目名称',})
+    @Column({
+        type: 'char',
+        nullable: false, 
+        charset: 'utf8mb4',
+        length: 50, 
+        unique: false, 
+        name: 'name', 
+        comment: '项目名称',
+    })
     name: string;
 
-    @Column({type: 'text',nullable: false,name: 'content',comment: '项目内容',})
+    @Column({ type: 'text', nullable: false,  charset: 'utf8mb4', name: 'content', comment: '项目内容', })
     content: string;
 
-    @Column({type: 'bool',name: 'star',default: false,comment: '是否是星标项目'})
+    @Column({ type: 'bool', name: 'star', default: false, comment: '是否是星标项目' })
     star: string;
 
-    @Column({type: 'varchar',nullable: true,default: 'https://img.blingabc.com/6d1edc49f8ff44a2bb21f20dea806d73.jpg',name: 'cover',comment: '项目封面'})
+    @Column({ type: 'varchar', nullable: true, default: 'https://img.blingabc.com/6d1edc49f8ff44a2bb21f20dea806d73.jpg', name: 'cover', comment: '项目封面' })
     cover: string;
 
-    @Column({type: 'int',name: 'status',nullable: false,default: () => 1,comment: '项目状态 1表示正常 2表示异常'})
+    @Column({ type: 'int', name: 'status', nullable: false, default: () => 1, comment: '项目状态 1表示正常 2表示异常' })
     status: number;
 
-    @CreateDateColumn({type: 'timestamp',nullable: false,name: 'createTime',comment: '项目创建时间',})
+    @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'createTime', comment: '项目创建时间', })
     createTime: Date;
 
     /**
@@ -54,13 +62,10 @@ export class Project {
 
     /**
      * 项目类型
-     * 项目类型和项目之间的多对多关系
+     * 项目类型和项目之间的多对一关系
      *  
      * */
-    @ManyToMany(() => Type, type => type.projects)
-    @JoinTable({
-        name: 'project_type' // 自定义关联表名称
-    })
+    @OneToMany(() => Type, type => type.project)
     types: Type[];
 
     /**
@@ -68,10 +73,7 @@ export class Project {
      * 项目标签和项目之间的多对多关系
      *  
      * */
-    @ManyToMany(() => Tag, tag => tag.projects)
-    @JoinTable({
-        name: 'project_tag' // 自定义关联表名称
-    })
+    @OneToMany(() => Tag, tag => tag.project)
     tags: Tag[];
 
     /**

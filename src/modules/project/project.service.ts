@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Project } from './entity/project.entity';
+import { Project } from '../../entity/project.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { Result } from '../../interface/result.interface';
 import { ProjectAddDTO } from './dto/projectAdd.dto';
 import { ProjectUpdateDTO } from './dto/projectUpdate.dto';
-import { User } from '../user/entity/user.entity';
+import { User } from '../../entity/user.entity';
 import { PostBody } from '../../interface/post-body.interface';
 import { ProjectTagAddDTO } from './dto/projectTagAdd.dto';
-import { Tag } from './entity/tag.entity';
-import { Type } from './entity/type.entity';
+import { Tag } from '../../entity/tag.entity';
+import { Type } from '../../entity/type.entity';
 import { ProjectTypeAddDTO } from './dto/projectTypeAdd.dto';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class ProjectService {
 
 
     /**
-    * 
+    * 项目列表 不分页
     * @param body 
     * @param request 
     * 按照name 字段模糊查询
@@ -147,10 +147,11 @@ export class ProjectService {
      */
     async projectTagAdd(projectTagAddDTO: ProjectTagAddDTO): Promise<Result> {
         try {
+            const {id, name, color } = projectTagAddDTO;
             const tag = new Tag();
-            tag.name = projectTagAddDTO.name;
-            tag.color = projectTagAddDTO.color;
-            tag.projects = await this.projectRepository.findByIds([projectTagAddDTO.id]);
+            tag.name = name;
+            tag.color = color;
+            tag.project = await this.projectRepository.findOne(id);
             const doc = await this.tagRepository.create(tag);
             return {
                 code: 10000,
@@ -171,9 +172,10 @@ export class ProjectService {
      */
     async projectTypeAdd(projectTypeAddDTO: ProjectTypeAddDTO): Promise<Result> {
         try {
+            const {id, name} = projectTypeAddDTO;
             const type = new Type();
-            type.name = projectTypeAddDTO.name;
-            type.projects = await this.projectRepository.findByIds([projectTypeAddDTO.id]);
+            type.name = name;
+            type.project = await this.projectRepository.findOne(id);
             const doc = await this.typeRepository.create(type);
             return {
                 code: 10000,

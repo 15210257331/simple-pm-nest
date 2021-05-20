@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { User } from '../user/entity/user.entity';
+import { User } from '../../entity/user.entity';
 import { ScheduleAddDTO } from './dto/schedule-add.dto';
-import { Schedule } from './entity/schedule.entity';
+import { Schedule } from '../../entity/schedule.entity';
 
 @Injectable()
 export class ScheduleService {

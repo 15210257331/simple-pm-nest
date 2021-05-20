@@ -52,11 +52,18 @@ export class UserController {
         return this.userService.deleteUser(id);
     }
 
-    // 用户列表
+    // 分页查询用户列表
     @UseGuards(AuthGuard('jwt'))
     @Post('/list')
-    public async findAll(@Body() body: PostBody): Promise<Result> {
+    public async list(@Body() body: PostBody): Promise<Result> {
         return this.userService.userList(body);
+    }
+
+    // 分页查询用户列表
+    @UseGuards(AuthGuard('jwt'))
+    @Get('/all')
+    public async all(@Body() body: PostBody): Promise<Result> {
+        return this.userService.all(body);
     }
 
     // 为用户关联角色
