@@ -1,5 +1,5 @@
 import { Project } from './project.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToOne, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { Task } from './task.entity';
 /**
  * 实体对应数据库中的表 字段类型会类比映射到数据库支持的类型
@@ -8,12 +8,12 @@ import { Task } from './task.entity';
 @Entity()
 export class Type {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @Column({
-        type: 'char',
+        type: 'text',
         nullable: false,
-        length: 50,
+        charset: 'utf8mb4',
         unique: false,
         name: 'name',
         comment: '类型名称',
@@ -49,9 +49,9 @@ export class Type {
 
 
     /**
-     * 任务和类型是多对多的关系
+     * 任务和类型是一对多的关系
      */
-    @ManyToMany(() => Task, task => task.types)
+    @OneToMany(() => Task, task => task.type)
     tasks: Task[];
 
 }

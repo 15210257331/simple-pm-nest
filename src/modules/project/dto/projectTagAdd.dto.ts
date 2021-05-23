@@ -8,6 +8,6 @@ export class ProjectTagAddDTO {
     readonly color: string;
 
     @IsNotEmpty({ message: '项目ID不能为空' })
-    readonly id: number;
+    readonly projectId: number;
 
 }

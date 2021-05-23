@@ -12,6 +12,7 @@ import { ProjectTagAddDTO } from './dto/projectTagAdd.dto';
 import { Tag } from '../../entity/tag.entity';
 import { Type } from '../../entity/type.entity';
 import { ProjectTypeAddDTO } from './dto/projectTypeAdd.dto';
+import { Task } from '../../entity/task.entity';
 
 @Injectable()
 export class ProjectService {
@@ -20,6 +21,7 @@ export class ProjectService {
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
         @InjectRepository(Type) private readonly typeRepository: Repository<Type>,
+        @InjectRepository(Task) private readonly taskRepository: Repository<Task>,
     ) { }
 
 
@@ -35,7 +37,7 @@ export class ProjectService {
                 where: {
                     'name': Like(`%${body.name}%`),
                 },
-                relations: ['creator', 'members'],
+                relations: ['creator', 'members', 'tags', 'types',],
                 order: {
                     createTime: 'DESC' //ASC 按时间正序 DESC 按时间倒序
                 }
@@ -123,12 +125,24 @@ export class ProjectService {
      */
     async projectDetail(id: number): Promise<Result> {
         try {
-            const doc = await this.projectRepository.findOne(id,{
-                relations: ['creator', 'members', 'tasks'],
-            });
+            const tasks = await this.taskRepository.createQueryBuilder('task')
+                .where('task.projectId = :id', { id })
+                .setParameter("id", id)
+                .leftJoinAndSelect('task.principal', 'principal')
+                .getMany()
+            const doc = await this.projectRepository.createQueryBuilder("project")
+                .where('project.id = :id', { id })
+                .setParameter("id", id)
+                .leftJoinAndSelect('project.creator', 'creator')
+                .leftJoinAndSelect('project.members', 'members')
+                .leftJoinAndSelect('project.tags', 'tags')
+                .leftJoinAndSelect('project.types', 'types')
+                .getOne();
+
+            doc.tasks = tasks;
             return {
                 code: 10000,
-                msg: 'success',
+                msg: '查询成功',
                 data: doc
             }
         } catch (err) {
@@ -147,15 +161,15 @@ export class ProjectService {
      */
     async projectTagAdd(projectTagAddDTO: ProjectTagAddDTO): Promise<Result> {
         try {
-            const {id, name, color } = projectTagAddDTO;
+            const { projectId, name, color } = projectTagAddDTO;
             const tag = new Tag();
             tag.name = name;
             tag.color = color;
-            tag.project = await this.projectRepository.findOne(id);
-            const doc = await this.tagRepository.create(tag);
+            tag.project = await this.projectRepository.findOne(projectId);
+            const doc = await this.tagRepository.save(tag);
             return {
                 code: 10000,
-                msg: 'success',
+                msg: '添加成功',
                 data: doc
             }
         } catch (err) {
@@ -172,11 +186,38 @@ export class ProjectService {
      */
     async projectTypeAdd(projectTypeAddDTO: ProjectTypeAddDTO): Promise<Result> {
         try {
-            const {id, name} = projectTypeAddDTO;
+            const { projectId, name } = projectTypeAddDTO;
             const type = new Type();
             type.name = name;
-            type.project = await this.projectRepository.findOne(id);
-            const doc = await this.typeRepository.create(type);
+            type.project = await this.projectRepository.findOne(projectId);
+            const doc = await this.typeRepository.save(type);
+            return {
+                code: 10000,
+                msg: 'success',
+                data: doc
+            }
+        } catch (err) {
+            return {
+                code: 999,
+                msg: err,
+            };
+        }
+    }
+
+    /**
+     * 添加项目成员
+     * @param projectDTO 
+     * @param request 
+     */
+    async projectMemberAdd(body: any): Promise<Result> {
+        try {
+            const { projectId, memberId } = body;
+            const project = await this.projectRepository.findOne(projectId, {
+                relations: ["members"]
+            });
+            const member = await this.userRepository.findOne(memberId);
+            project.members.push(member);
+            const doc = await this.projectRepository.save(project);
             return {
                 code: 10000,
                 msg: 'success',

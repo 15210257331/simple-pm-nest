@@ -7,13 +7,16 @@ import { UserModule } from '../user/user.module';
 import { User } from '../../entity/user.entity';
 import { Type } from '../../entity/type.entity';
 import { Tag } from '../../entity/tag.entity';
+import { Task } from '../../entity/task.entity';
+import { TaskController } from './task.controller';
+import { TaskService } from './task.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Project,User,Type,Tag]),
+    TypeOrmModule.forFeature([Project,Task,User,Type,Tag]),
     UserModule
   ],
-  providers: [ProjectService],
-  controllers: [ProjectController]
+  providers: [ProjectService,TaskService],
+  controllers: [ProjectController,TaskController]
 })
 export class ProjectModule { }

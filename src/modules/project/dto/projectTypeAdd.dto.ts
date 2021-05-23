@@ -5,6 +5,6 @@ export class ProjectTypeAddDTO {
     readonly name: string;
 
     @IsNotEmpty({ message: '项目ID不能为空' })
-    readonly id: number;
+    readonly projectId: number;
 
 }

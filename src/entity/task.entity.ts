@@ -93,11 +93,9 @@ export class Task {
     /**
      * 任务和类型是多对多的关系
      */
-    @ManyToMany(() => Type, type => type.tasks)
-    @JoinTable({
-        name: 'task_type' // 自定义关联表名称
-    })
-    types: Type[];
+    @ManyToOne(() => Type, type => type.tasks)
+    @JoinColumn()
+    type: Type;
 
     /**
      * 任务和标签是多对多的关系

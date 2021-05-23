@@ -67,4 +67,10 @@ export class ProjectController {
     public async projectTypeAdd(@Body() projectTypeAddDTO: ProjectTypeAddDTO): Promise<Result> {
         return this.projectService.projectTypeAdd(projectTypeAddDTO);
     }
+
+    @Post('/member/add')
+    @UseGuards(AuthGuard('jwt'))
+    public async projectMemberAdd(@Body() body: any): Promise<Result> {
+        return this.projectService.projectMemberAdd(body);
+    }
 }

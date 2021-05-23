@@ -10,13 +10,14 @@ import { AuthModule } from './modules/auth/auth.module';
 import { FileModule } from './modules/file/file.module';
 import { ProjectModule } from './modules/project/project.module';
 import { Project } from './entity/project.entity';
-import { TaskModule } from './modules/task/task.module';
 import { Type } from './entity/type.entity';
 import { EventsGateway } from './modules/message/events.gateway';
 import { RoleModule } from './modules/role/role.module';
 import { Role } from './entity/role.entity';
 import { Schedule } from './entity/schedule.entity';
 import { ScheduleModule } from './modules/schedule/schedule.module';
+import { MessageModule } from './modules/message/message.module';
+import { Message } from './entity/message.entity';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { ScheduleModule } from './modules/schedule/schedule.module';
       username: 'root',
       password: '123456',
       database: 'simple_pm',
-      entities: [User,Project,Task,Type, Tag,Role,Schedule],
+      entities: [User,Project,Task,Type, Tag,Role,Schedule,],
       charset: "utf8mb4", // 设置chatset编码为utf8mb4
       synchronize: true,
     }),
@@ -35,9 +36,9 @@ import { ScheduleModule } from './modules/schedule/schedule.module';
     AuthModule,
     FileModule,
     ProjectModule,
-    TaskModule,
     RoleModule,
     ScheduleModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService, EventsGateway],

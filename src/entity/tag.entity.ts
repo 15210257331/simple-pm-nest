@@ -8,19 +8,26 @@ import { Task } from './task.entity';
 @Entity()
 export class Tag {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
-    @Column({type: 'char',nullable: false,length: 50,unique: false,name: 'name',comment: '标签名称',})
+    @Column({
+        type: 'varchar',
+        nullable: false,
+        unique: false,
+        name: 'name',
+        comment: '标签名称',
+    })
     name: string;
 
-    @Column({type: 'char',nullable: false,length: 50,unique: false,name: 'color',comment: '标签颜色',})
+
+    @Column({ type: 'char', nullable: false, length: 50, unique: false, name: 'color', comment: '标签颜色', })
     color: string;
 
 
-    @Column({type: 'int',name: 'status',nullable: false,default: () => 1,comment: '标签状态 1表示正常 2表示禁用'})
+    @Column({ type: 'int', name: 'status', nullable: false, default: () => 1, comment: '标签状态 1表示正常 2表示禁用' })
     status: number;
 
-    @CreateDateColumn({type: 'timestamp',nullable: false,name: 'createTime',comment: '标签创建时间',})
+    @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'createTime', comment: '标签创建时间', })
     createTime: Date;
 
     /**

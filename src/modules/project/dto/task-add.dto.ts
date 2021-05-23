@@ -11,4 +11,12 @@ export class TaskAddDTO {
     @IsNumber()
     readonly projectId: number;
 
+    @IsNotEmpty({ message: '标签不能为空' })
+    @IsNumber()
+    readonly tags: number[];
+
+    @IsNotEmpty({ message: '任务类型不能为空' })
+    @IsNumber()
+    readonly type: number;
+
 }
