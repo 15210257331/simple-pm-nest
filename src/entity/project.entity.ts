@@ -23,19 +23,47 @@ export class Project {
     })
     name: string;
 
-    @Column({ type: 'text', nullable: false,  charset: 'utf8mb4', name: 'content', comment: '项目内容', })
+    @Column({ 
+        type: 'text', 
+        nullable: false,  
+        charset: 'utf8mb4', 
+        name: 'content', 
+        comment: '项目内容', 
+    })
     content: string;
 
-    @Column({ type: 'bool', name: 'star', default: false, comment: '是否是星标项目' })
+    @Column({ 
+        type: 'bool', 
+        name: 'star', 
+        default: false, 
+        comment: '是否是星标项目' 
+    })
     star: string;
 
-    @Column({ type: 'varchar', nullable: true, default: 'https://img.blingabc.com/6d1edc49f8ff44a2bb21f20dea806d73.jpg', name: 'cover', comment: '项目封面' })
+    @Column({ 
+        type: 'varchar', 
+        nullable: true, 
+        default: 'https://img.blingabc.com/6d1edc49f8ff44a2bb21f20dea806d73.jpg', 
+        name: 'cover', 
+        comment: '项目封面' 
+    })
     cover: string;
 
-    @Column({ type: 'int', name: 'status', nullable: false, default: () => 1, comment: '项目状态 1表示正常 2表示异常' })
+    @Column({ 
+        type: 'int', 
+        name: 'status', 
+        nullable: false, 
+        default: () => 1, 
+        comment: '项目状态 1表示正常 2表示异常' 
+    })
     status: number;
 
-    @CreateDateColumn({ type: 'timestamp', nullable: false, name: 'createTime', comment: '项目创建时间', })
+    @CreateDateColumn({ 
+        type: 'timestamp', 
+        nullable: false, 
+        name: 'createTime', 
+        comment: '项目创建时间', 
+    })
     createTime: Date;
 
     /**

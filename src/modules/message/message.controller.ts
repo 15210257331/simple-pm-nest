@@ -17,10 +17,6 @@ export class MessageController {
         return this.messageService.list(body);
     }
 
-    /**
-     * @param data 
-     * 分页查询角色列表
-     */
     @Post('/add')
     @UsePipes(new ValidationPipe())
     @UseGuards(AuthGuard('jwt'))

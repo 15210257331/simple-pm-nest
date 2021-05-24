@@ -7,7 +7,7 @@ const l = console.log
 export class EventsGateway {
   @WebSocketServer() server;
 
-  @SubscribeMessage('events')
+  @SubscribeMessage('private message')
   handleEvent(client: any, payload: any): Observable<WsResponse<any>> | any {
     // this.server.emit('resmsg', data);  // io.emit('resmsg', payload)
     let { name } = payload;
@@ -18,17 +18,6 @@ export class EventsGateway {
           msg: 'hello ajanuw!'
         }
       })
-    }
-    if (name === 'alone') {
-      return of('hi', '实打实')
-        .pipe(
-          map($_ =>
-            ({
-              event: 'events', data: {
-                msg: $_
-              }
-            }))
-        );
     }
     return of(payload);
   }

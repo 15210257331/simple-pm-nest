@@ -129,6 +129,9 @@ export class ProjectService {
                 .where('task.projectId = :id', { id })
                 .setParameter("id", id)
                 .leftJoinAndSelect('task.principal', 'principal')
+                // .select(`
+                // principal.avatar as avatar
+                // `)
                 .getMany()
             const doc = await this.projectRepository.createQueryBuilder("project")
                 .where('project.id = :id', { id })

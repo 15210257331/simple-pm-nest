@@ -18,6 +18,7 @@ import { Schedule } from './entity/schedule.entity';
 import { ScheduleModule } from './modules/schedule/schedule.module';
 import { MessageModule } from './modules/message/message.module';
 import { Message } from './entity/message.entity';
+import { Comment } from './entity/comment.entity';
 
 @Module({
   imports: [
@@ -28,7 +29,7 @@ import { Message } from './entity/message.entity';
       username: 'root',
       password: '123456',
       database: 'simple_pm',
-      entities: [User,Project,Task,Type, Tag,Role,Schedule,],
+      entities: [User,Project,Task,Type, Tag,Role,Schedule,Comment,Message],
       charset: "utf8mb4", // 设置chatset编码为utf8mb4
       synchronize: true,
     }),

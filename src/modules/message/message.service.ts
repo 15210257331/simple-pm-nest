@@ -11,13 +11,28 @@ export class MessageService {
     ) { }
 
 
-
+    /**
+     * 查询消息历史消息
+     * 默认去最近30条数据
+     * @param body 
+     */
     async list(body: any): Promise<any> {
         try {
-            // const doc = await this.messageRepository.find();
+            const { userId } = body;
+            const doc = await this.messageRepository.find({
+                where: {
+                    'sendId': userId,
+                    'receiveId': userId
+                },
+                cache: true,
+                order: {
+                    sendDate: 'DESC'
+                },
+                take: 30
+            });
             return {
                 code: 10000,
-                data: [],
+                data: doc,
                 msg: 'Success',
             };
         } catch (error) {
@@ -29,28 +44,21 @@ export class MessageService {
     }
 
     /**
-     * 分页角色列表
+     * 添加消息
      * @param body 
      */
     async add(body: PostBody): Promise<any> {
         try {
-            const { name, page, size } = body;
-            // const [doc, count] = await this.messageRepository.findAndCount({
-            //     where: {
-            //         'name': Like(`%${name}%`),
-            //     },
-            //     cache: true,
-            //     order: {
-            //         createDate: 'DESC' //ASC 按时间正序 DESC 按时间倒序
-            //     },
-            //     skip: (page - 1) * size,
-            //     take: size,
-            // });
+            const { content, sendId, receiveId } = body;
+            const message = new Message();
+            message.content = content;
+            message.sendId = sendId;
+            message.receiveId = receiveId;
+            message.sendDate = new Date();
+            const doc = await this.messageRepository.save(message);
             return {
                 code: 10000,
-                data: {
-                    
-                },
+                data: doc,
                 msg: 'success',
             };
         } catch (error) {

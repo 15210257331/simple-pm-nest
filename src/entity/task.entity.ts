@@ -1,8 +1,9 @@
 import { Project } from './project.entity';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToOne, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinTable, OneToOne, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from './user.entity';
 import { Type } from './type.entity';
 import { Tag } from './tag.entity';
+import { Comment } from './comment.entity'
 /**
  * 实体对应数据库中的表 字段类型会类比映射到数据库支持的类型
  * 你也可以通过在@Column装饰器中隐式指定列类型来使用数据库支持的任何列类型
@@ -75,7 +76,7 @@ export class Task {
     /**
      * 任务和任务负责人是多对一的关系
      */
-    @ManyToOne(() => User)
+    @ManyToOne(() => User,)
     @JoinColumn()
     principal: User;
 
@@ -105,4 +106,11 @@ export class Task {
         name: 'task_tag' // 自定义关联表名称
     })
     tags: Tag[];
+
+    /**
+    * 任务和项目是一对多的关系
+    * 该项目下所包含的任务
+    *  */
+   @OneToMany(() => Comment, comment => comment.task)
+   comments: Comment[];
 }

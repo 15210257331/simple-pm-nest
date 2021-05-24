@@ -38,7 +38,7 @@ export class Schedule {
     @CreateDateColumn({
         type: 'timestamp',
         nullable: true,
-        name: 'updateDate',
+        name: 'startDate',
         // default: Date.now,
         comment: '开始时间',
     })
@@ -47,7 +47,7 @@ export class Schedule {
     @CreateDateColumn({
         type: 'timestamp',
         nullable: true,
-        name: 'updateDate',
+        name: 'endDate',
         // default: Date.now,
         comment: '结束时间',
     })
