@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../../entity/user.entity';
+import { User } from './entity/user.entity';
 import { Repository, Like } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { makeSalt, encryptPassword } from '../../common/utils';
@@ -9,7 +9,7 @@ import { Result } from '../../interface/result.interface';
 import { PostBody } from '../../interface/post-body.interface';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
-import { Role } from '../../entity/role.entity';
+import { Role } from '../role/entity/role.entity';
 
 @Injectable()
 export class UserService {

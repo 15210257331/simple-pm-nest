@@ -1,14 +1,14 @@
-import { Project } from '../../entity/project.entity';
+import { Project } from './entity/project.entity';
 import { Injectable, Request, } from '@nestjs/common';
 import { TaskAddDTO } from './dto/task-add.dto';
 import { Result } from '../../interface/result.interface';
-import { Task } from '../../entity/task.entity';
+import { Task } from './entity/task.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { generate8Code } from '../../common/utils';
-import { User } from '../../entity/user.entity';
-import { Tag } from '../../entity/tag.entity';
-import { Type } from '../../entity/type.entity';
+import { User } from '../user/entity/user.entity';
+import { Tag } from './entity/tag.entity';
+import { Type } from './entity/type.entity';
 
 @Injectable()
 export class TaskService {

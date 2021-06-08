@@ -59,7 +59,7 @@ export class UserController {
         return this.userService.userList(body);
     }
 
-    // 分页查询用户列表
+    // 查询所有用户列表
     @UseGuards(AuthGuard('jwt'))
     @Get('/all')
     public async all(@Body() body: PostBody): Promise<Result> {

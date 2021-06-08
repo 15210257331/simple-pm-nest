@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Project } from '../../entity/project.entity';
+import { Project } from './entity/project.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import { Result } from '../../interface/result.interface';
 import { ProjectAddDTO } from './dto/projectAdd.dto';
 import { ProjectUpdateDTO } from './dto/projectUpdate.dto';
-import { User } from '../../entity/user.entity';
+import { User } from '../user/entity/user.entity';
 import { PostBody } from '../../interface/post-body.interface';
 import { ProjectTagAddDTO } from './dto/projectTagAdd.dto';
-import { Tag } from '../../entity/tag.entity';
-import { Type } from '../../entity/type.entity';
+import { Tag } from './entity/tag.entity';
+import { Type } from './entity/type.entity';
 import { ProjectTypeAddDTO } from './dto/projectTypeAdd.dto';
-import { Task } from '../../entity/task.entity';
+import { Task } from './entity/task.entity';
 
 @Injectable()
 export class ProjectService {

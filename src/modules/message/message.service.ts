@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostBody } from '../../interface/post-body.interface';
 import { Like, Repository } from 'typeorm';
-import { Message } from '../../entity/message.entity';
+import { Message } from './entity/message.entity';
 
 @Injectable()
 export class MessageService {
@@ -12,28 +12,22 @@ export class MessageService {
 
 
     /**
-     * 查询消息历史消息
-     * 默认去最近30条数据
+     * 查询和某个好友消息历史消息
+     * 默认最近30条数据
      * @param body 
      */
-    async list(body: any): Promise<any> {
+    async list(id: number, request: any): Promise<any> {
         try {
-            const { userId } = body;
-            const doc = await this.messageRepository.find({
-                where: {
-                    'sendId': userId,
-                    'receiveId': userId
-                },
-                cache: true,
-                order: {
-                    sendDate: 'DESC'
-                },
-                take: 30
-            });
+            const doc = await this.messageRepository.createQueryBuilder("message")
+                .where("message.sendId = :sendId", { sendId: request.user.userId })
+                .orWhere("message.receiveId = :receiveId", { receiveId: id })
+                .orderBy("message.sendDate", "DESC")
+                .limit(30)
+                .getMany();
             return {
                 code: 10000,
                 data: doc,
-                msg: 'Success',
+                msg: 'success',
             };
         } catch (error) {
             return {
@@ -44,15 +38,16 @@ export class MessageService {
     }
 
     /**
-     * 添加消息
+     * 新建消息
      * @param body 
      */
     async add(body: PostBody): Promise<any> {
         try {
-            const { content, sendId, receiveId } = body;
+            const { content, type, sendId, receiveId } = body;
             const message = new Message();
             message.content = content;
             message.sendId = sendId;
+            message.type = type;
             message.receiveId = receiveId;
             message.sendDate = new Date();
             const doc = await this.messageRepository.save(message);
