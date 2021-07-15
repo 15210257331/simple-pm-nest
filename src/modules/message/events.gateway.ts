@@ -17,7 +17,7 @@ export class EventsGateway {
   // 新用户连接至websocket
   @SubscribeMessage('new user')
   newUser(client: any, userId: number): Observable<WsResponse<any>> | any {
-    console.log('new user');
+    // console.log('new user');
     const keys = Object.keys(this.users);
     if (userId && keys.indexOf(String(userId)) < 0) {
       this.users[userId] = client;
@@ -31,10 +31,11 @@ export class EventsGateway {
     // 对方在线直接发送过去
     if (this.users[receiveId]) {
       console.log('在线直接发送');
-      return of({
-        event: 'private message',
-        payload: payload
-      })
+      this.users[receiveId].emit('private message', payload);
+      // return of({
+      //   event: 'private message',
+      //   payload: payload
+      // })
       // 如果不在线不发送存数据库等上线再发送
     } else {
       // await Message.create(msg);
