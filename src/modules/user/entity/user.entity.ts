@@ -70,8 +70,8 @@ export class User {
     @Column({
         type: 'int',
         name: 'sex',
-        nullable: true,
-        enum: [1, 2],
+        nullable: false,
+        default: () => 1,
         comment: '性别 1表示男 2表示女'
     })
     sex: number;

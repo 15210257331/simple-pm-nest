@@ -24,7 +24,7 @@ import { Comment } from './modules/project/entity/comment.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: '129.211.164.125',
       port: 3306,
       username: 'root',
       password: '123456',
